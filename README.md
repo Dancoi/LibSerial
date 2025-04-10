@@ -9,6 +9,7 @@ yarn dev:server
 ```
 
 Пример переменных окружения
+- api_key получить на [API](https://api.kinopoisk.dev/documentation)
 ```
 DB_HOST=localhost
 DB_USER=postgres
@@ -17,8 +18,9 @@ DB_NAME=LibSerialDB
 DB_PORT=5432
 JWT_SECRET=SecretKey
 
-X_API_KEY=api_key (from [API](https://api.kinopoisk.dev/documentation))
+X_API_KEY=api_key
 ```
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
