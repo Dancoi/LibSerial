@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+#root {
+  max-width: 100%;
+  margin: 0 auto;
+  /* padding: 2rem; */
+  /*text-align: center;*/
+}
+
+.main-part {
+  margin-top: 64px; /* Высота NavBar */
+  height: calc(100vh - 64px); /* Оставшееся место на экране */
+  overflow-y: auto; /* Прокрутка только внутри основного окна */
+  padding: 1rem; /* Отступы внутри */
+  background-color: #f3f4f6; /* bg-gray-100 */
+}
