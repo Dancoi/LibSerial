@@ -17,7 +17,7 @@ DB_NAME=LibSerialDB
 DB_PORT=5432
 JWT_SECRET=SecretKey
 
-X_API_KEY=api_key (from https://api.kinopoisk.dev/documentation)
+X_API_KEY=api_key (from [API](https://api.kinopoisk.dev/documentation))
 ```
 # React + Vite
 
