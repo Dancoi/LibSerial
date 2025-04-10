@@ -2,7 +2,8 @@
 
 Для запуска используйте:
 ```
-yarn init
+cd путь/до/проекта
+yarn install
 yarn dev
 yarn dev:server
 ```
