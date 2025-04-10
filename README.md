@@ -1,3 +1,13 @@
+# Сервис поиска и просмотра сериалов
+
+Для запуска используйте:
+```
+yarn init
+yarn dev
+yarn dev:server
+```
+
+Пример переменных окружения
 ```
 DB_HOST=localhost
 DB_USER=postgres
