@@ -1,3 +1,13 @@
+```
+DB_HOST=localhost
+DB_USER=postgres
+DB_PASSWORD=password
+DB_NAME=LibSerialDB
+DB_PORT=5432
+JWT_SECRET=SecretKey
+
+X_API_KEY=api_key (from https://api.kinopoisk.dev/documentation)
+```
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
