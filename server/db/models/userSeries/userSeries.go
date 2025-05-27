@@ -12,9 +12,9 @@ type UserSeries struct {
 	User     userModel.User     `gorm:"foreignKey:UserID"`
 	Series   seriesModel.Series `gorm:"foreignKey:SeriesID"`
 
-	Status    string    `gorm:"size:100"`       // например: "watching", "completed", "planned"
-	Rating    int       `gorm:"default:0"`      // рейтинг от пользователя
-	Note      string    `gorm:"size:512"`       // заметка
-	CreatedAt time.Time `gorm:"autoCreateTime"` // когда добавил
+	Status    string    `gorm:"size:100"`
+	Rating    int       `gorm:"default:0"`
+	Note      string    `gorm:"size:512"`
+	CreatedAt time.Time `gorm:"autoCreateTime"`
 	UpdatedAt time.Time `gorm:"autoUpdateTime"`
 }

@@ -9,6 +9,9 @@ import ProfilePage from "../pages/ProfilePage.jsx";
 import {useAuth} from "../contexts/AuthContext.jsx";
 import SeriesPage from "../pages/SeriesPage.jsx";
 import FindAddPage from "../pages/FindAddPage.jsx";
+import CompilationPage from "../pages/CompilationPage.jsx";
+import AdminSeriesPage from "../pages/AdminSeriesPage.jsx";
+import EditSeriesPage from "../pages/EditSeriesPage.jsx";
 
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -17,6 +20,16 @@ const ProtectedRoute = ({ children }) => {
 
     if (loading) return <></>
     if (!user) return <Navigate to="/login" />;
+    return children;
+};
+
+// eslint-disable-next-line react-refresh/only-export-components
+const AdminRoute = ({ children }) => {
+    const { user, loading } = useAuth();
+
+    if (loading) return <></>;
+    if (!user) return <Navigate to="/login" />;
+    if (user.Role.Role !== 'admin') return <Navigate to="/" />;
     return children;
 };
 
@@ -54,5 +67,23 @@ export const routes = [
             <ProtectedRoute>
                 <FindAddPage/>
             </ProtectedRoute>
+    },
+    {
+        path: "/compilation",
+        element: <CompilationPage/>
+    },
+    {
+        path: "/admin/series",
+        element:
+            <AdminRoute>
+                <AdminSeriesPage/>
+            </AdminRoute>
+    },
+    {
+        path: "/admin/series/edit/:id",
+        element:
+            <AdminRoute>
+                <EditSeriesPage/>
+            </AdminRoute>
     }
 ];

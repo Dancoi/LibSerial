@@ -8,35 +8,48 @@ import (
 	"libserial/server/db/models/userModel"
 	"libserial/server/db/models/userSeries"
 	"log"
+	"os"
+	"sync"
 )
 
-var DB *gorm.DB
-var migrationBool bool
+var (
+	DB   *gorm.DB
+	once sync.Once
+)
 
-func ConnectDB(dsn string) {
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		log.Fatal("Ошибка подключения к БД:", err)
-	}
+func ConnectDB() *gorm.DB {
+	once.Do(func() {
+		dsn := fmt.Sprintf(
+			"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
+			os.Getenv("DB_HOST"),
+			os.Getenv("DB_USER"),
+			os.Getenv("DB_PASSWORD"),
+			os.Getenv("DB_NAME"),
+			os.Getenv("DB_PORT"),
+		)
 
-	migrationBool = true
-	if migrationBool {
+		db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+		if err != nil {
+			log.Fatal("Ошибка подключения к БД:", err)
+		}
+
+		// Выполняем миграции
 		err = db.AutoMigrate(
 			&userModel.User{},
 			&userModel.Role{},
 			&userSeries.UserSeries{},
-
 			&seriesModel.Genre{},
 			&seriesModel.Series{},
 			&seriesModel.Season{},
 			&seriesModel.Episode{},
 		)
-	}
+		if err != nil {
+			log.Fatal("Ошибка миграции:", err)
+		}
 
-	if err != nil {
-		log.Fatal("Ошибка миграции:", err)
-	}
+		DB = db
+		fmt.Println("База данных подключена и таблицы созданы!")
+	})
 
-	DB = db
-	fmt.Println("База данных подключена и таблицы созданы!")
+	return DB
 }

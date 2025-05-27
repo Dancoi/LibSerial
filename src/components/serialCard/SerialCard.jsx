@@ -14,9 +14,9 @@ const SeriesCard = ({ series }) => {
     const [isTooltipVisible, setTooltipVisible] = useState(false);
 
     return (
-        <div className="bg-white rounded-xl shadow-md overflow-visible hover:shadow-lg transition-shadow duration-300">
+        <div className="min-h-96 bg-white rounded-xl shadow-md overflow-visible hover:shadow-lg transition-shadow duration-300">
 
-            <div className="relative h-48 overflow-hidden">
+            <div className="relative h-48 overflow-hidden rounded-xl">
 
                 {series.BackdropURL !== 'https://placehold.co/600x400' && series.BackdropURL !== '' ? (
                     <img

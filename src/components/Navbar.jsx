@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { LogIn, UserPlus, TvMinimalPlay, User, LogOut, Menu, X } from "lucide-react";
+import { LogIn, UserPlus, TvMinimalPlay, User, LogOut, Menu, X, Shield } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext.jsx";
 
 const NavBar = () => {
@@ -34,8 +34,8 @@ const NavBar = () => {
                     {/* Меню (десктоп) */}
                     <div className="hidden sm:flex space-x-6 text-lg">
                         <Link to="/" className="hover:text-indigo-200 transition-colors">Каталог</Link>
-                        <Link to="/profile" className="hover:text-indigo-200 transition-colors">Сериалы</Link>
-                        <Link to="/" className="hover:text-indigo-200 transition-colors">Подборки</Link>
+                        <Link to="/profile" className="hover:text-indigo-200 transition-colors">Мои Сериалы</Link>
+                        <Link to="/compilation" className="hover:text-indigo-200 transition-colors">Подборки</Link>
                     </div>
 
                     {/* Аутентификация (десктоп) */}
@@ -43,6 +43,17 @@ const NavBar = () => {
                         {!loading && (
                             user ? (
                                 <>
+                                    {user.Role.Role === 'admin' && (
+                                        <Link
+                                            to="/admin/series"
+                                            className="flex items-center hover:text-indigo-200 transition-colors"
+                                            title="Админ-панель"
+                                        >
+                                            <Shield className="h-5 w-5 mr-1" />
+                                            Админ
+                                        </Link>
+                                    )}
+
                                     <Link to="/profile" className="flex items-center hover:text-indigo-200 transition-colors">
                                         <User className="h-5 w-5 mr-1" />
                                         <span>{user.Name || "Null"}</span>
@@ -73,11 +84,20 @@ const NavBar = () => {
                     <div className="sm:hidden flex flex-col gap-4 pb-4 text-base border-t border-indigo-500">
                         <Link to="/" className="hover:text-indigo-200 transition-colors">Каталог</Link>
                         <Link to="/profile" className="hover:text-indigo-200 transition-colors">Сериалы</Link>
-                        <Link to="/" className="hover:text-indigo-200 transition-colors">Подборки</Link>
+                        <Link to="/compilation" className="hover:text-indigo-200 transition-colors">Подборки</Link>
 
                         {!loading && (
                             user ? (
                                 <>
+                                    {user.Role.Role === 'admin' && (
+                                        <Link
+                                            to="/admin/series"
+                                            className="flex items-center hover:text-indigo-200 transition-colors"
+                                        >
+                                            <Shield className="h-5 w-5 mr-1" />
+                                            Админ-панель
+                                        </Link>
+                                    )}
                                     <Link to="/profile" className="flex items-center hover:text-indigo-200 transition-colors">
                                         <User className="h-5 w-5 mr-1" />
                                         <span>{user.Name || "Null"}</span>

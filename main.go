@@ -19,24 +19,19 @@ func Init() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_NAME"),
-		os.Getenv("DB_PORT"),
-	)
+	//dsn := fmt.Sprintf(
+	//	"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
+	//	os.Getenv("DB_HOST"),
+	//	os.Getenv("DB_USER"),
+	//	os.Getenv("DB_PASSWORD"),
+	//	os.Getenv("DB_NAME"),
+	//	os.Getenv("DB_PORT"),
+	//)
 
 	x_api_key := os.Getenv("X_API_KEY")
 
-	db.ConnectDB(dsn)
+	db.ConnectDB()
 	kinopoiskParse.SetAPIKey(x_api_key)
-	//kinopoiskParse.MapModelFromApiToDB("Пространство", 1, 1)
-	//kinopoiskParse.MapModelFromApiToDB("Голяк", 1, 1)
-	//kinopoiskParse.MapModelFromApiToDB("Бесстыжие", 1, 1)
-	//kinopoiskParse.MapModelFromApiToDB("Сосны", 1, 1)
-	//kinopoiskParse.MapModelFromApiToDB("Мир дикого запада", 1, 1)
 }
 
 func main() {

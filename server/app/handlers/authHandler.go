@@ -131,18 +131,7 @@ func Authenticate(next http.HandlerFunc) http.HandlerFunc {
 		}
 		tokenString := parts[1]
 
-		// Проверяем токен на совпадение
 		secretKey := os.Getenv("JWT_SECRET")
-		//token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		//	return []byte(secretKey), nil
-		//})
-		//if err != nil {
-		//	http.Error(w, fmt.Sprintf("Ошибка получения токена: %v", err), http.StatusUnauthorized)
-		//	return
-		//}
-		//if !token.Valid {
-		//	http.Error(w, "Токен не прошёл валидацию", http.StatusUnauthorized)
-		//}
 		token, err := jwt.ParseWithClaims(tokenString, &JWTClaims{}, func(token *jwt.Token) (interface{}, error) {
 			return []byte(secretKey), nil
 		})
@@ -151,7 +140,6 @@ func Authenticate(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 		if claims, ok := token.Claims.(*JWTClaims); ok && token.Valid {
-			// Добавляем claims в контекст запроса
 			ctx := context.WithValue(r.Context(), "UserID", claims.UserID)
 			next(w, r.WithContext(ctx))
 		} else {

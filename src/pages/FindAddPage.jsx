@@ -34,7 +34,12 @@ const FindAddPage = () => {
     const handleConfirmAdd = async () => {
         if (!selectedSeries) return;
         try {
-            await axios.post("http://localhost:8080/api/series", selectedSeries);
+            const token = localStorage.getItem('token');
+            await axios.post("http://localhost:8080/api/series", selectedSeries, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             setShowModal(false);
             setSelectedSeries(null);
             navigate(`/serial/${selectedSeries.ID}`);

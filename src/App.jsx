@@ -3,6 +3,7 @@ import NavBar from './components/Navbar'
 import AppRouter from './components/AppRouter';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import ScrollToTopButton from "./components/ScrollToTopButton.jsx";
 
 function App() {
 
@@ -11,6 +12,7 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <AppRouter />
+        <ScrollToTopButton/>
       </BrowserRouter>
     </AuthProvider>
   )
