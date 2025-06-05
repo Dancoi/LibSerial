@@ -17,7 +17,8 @@ import (
 
 // JWTClaims - структура для токена
 type JWTClaims struct {
-	UserID uint `json:"user_id"`
+	UserID uint   `json:"user_id"`
+	Role   string `json:"role"`
 	jwt.RegisteredClaims
 }
 
@@ -64,7 +65,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Ищем пользователя в БД
-	result := db.DB.Where("email = ?", input.Email).First(&user)
+	result := db.DB.Where("email = ?", input.Email).Preload("Role").First(&user)
 	if result.Error != nil {
 		http.Error(w, "Пользователь не найден", http.StatusUnauthorized)
 
@@ -81,6 +82,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	// Генерируем JWT
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, JWTClaims{
 		UserID: user.ID,
+		Role:   user.Role.Role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24)),
 		},
@@ -141,6 +143,7 @@ func Authenticate(next http.HandlerFunc) http.HandlerFunc {
 		}
 		if claims, ok := token.Claims.(*JWTClaims); ok && token.Valid {
 			ctx := context.WithValue(r.Context(), "UserID", claims.UserID)
+			ctx = context.WithValue(ctx, "UserRole", claims.Role)
 			next(w, r.WithContext(ctx))
 		} else {
 			http.Error(w, "Токен не прошёл валидацию", http.StatusUnauthorized)

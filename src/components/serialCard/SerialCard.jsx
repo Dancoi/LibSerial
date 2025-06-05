@@ -25,11 +25,6 @@ const SeriesCard = ({ series }) => {
                         className="w-full h-full object-cover"
                     />
                 ) : (
-                    // <img
-                    //     src={series.LogoURL}
-                    //     alt={series.Title}
-                    //     className="bg-gray-300 w-full h-full object-contain px-2"
-                    // />
                     <img
                         src={
                             series.LogoURL !== 'https://placehold.co/600x400' && series.LogoURL !== ''

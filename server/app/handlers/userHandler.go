@@ -117,3 +117,39 @@ func UpdateUserName(w http.ResponseWriter, r *http.Request) {
 		"message": "Имя успешно обновлено",
 	})
 }
+
+type UpdateUserRoleRequest struct {
+	UserID uint `json:"user_id"`
+	RoleID uint `json:"role_id"`
+}
+
+func UpdateUserRole(w http.ResponseWriter, r *http.Request) {
+	authRole, ok := r.Context().Value("UserRole").(string)
+	if !ok || authRole != "admin" {
+		http.Error(w, "Доступ запрещён", http.StatusForbidden)
+		return
+	}
+
+	var req UpdateUserRoleRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Неверный формат данных", http.StatusBadRequest)
+		return
+	}
+
+	var user userModel.User
+	if err := db.DB.First(&user, req.UserID).Error; err != nil {
+		http.Error(w, "Пользователь не найден", http.StatusNotFound)
+		return
+	}
+
+	user.RoleID = req.RoleID
+	if err := db.DB.Save(&user).Error; err != nil {
+		http.Error(w, "Ошибка обновления роли", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "Роль пользователя успешно обновлена",
+	})
+}

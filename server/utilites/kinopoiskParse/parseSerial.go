@@ -213,8 +213,8 @@ import (
 	"strings"
 )
 
-// SeriesBuilder определяет интерфейс для поэтапной сборки seriesModel.Series
 type SeriesBuilder interface {
+	WithID(id uint) SeriesBuilder
 	WithTitle(name, altName string) SeriesBuilder
 	WithYear(year int) SeriesBuilder
 	WithGenres(genres []struct{ Name string }) SeriesBuilder
@@ -228,13 +228,11 @@ type SeriesBuilder interface {
 	SaveToDB() error
 }
 
-// KinopoiskSeriesBuilder реализует сборку seriesModel.Series из данных API Кинопоиск
 type KinopoiskSeriesBuilder struct {
 	series seriesModel.Series
 	db     *gorm.DB
 }
 
-// NewKinopoiskSeriesBuilder создает новый билдер
 func NewKinopoiskSeriesBuilder(db *gorm.DB) *KinopoiskSeriesBuilder {
 	return &KinopoiskSeriesBuilder{
 		series: seriesModel.Series{},
@@ -242,7 +240,6 @@ func NewKinopoiskSeriesBuilder(db *gorm.DB) *KinopoiskSeriesBuilder {
 	}
 }
 
-// APISeries структура для ответа API Кинопоиск (без изменений)
 type APISeries struct {
 	ID               uint   `json:"id"`
 	Name             string `json:"name"`
@@ -270,13 +267,16 @@ type APISeries struct {
 	} `json:"genres"`
 }
 
-// WithTitle устанавливает название сериала
+func (b *KinopoiskSeriesBuilder) WithID(id uint) SeriesBuilder {
+	b.series.ID = id
+	return b
+}
+
 func (b *KinopoiskSeriesBuilder) WithTitle(name, altName string) SeriesBuilder {
 	b.series.Title = firstNonEmpty(name, altName)
 	return b
 }
 
-// WithYear устанавливает год выпуска
 func (b *KinopoiskSeriesBuilder) WithYear(year int) SeriesBuilder {
 	if year >= 1888 { // Валидация: первый фильм был в 1888 году
 		b.series.Year = year
@@ -284,7 +284,6 @@ func (b *KinopoiskSeriesBuilder) WithYear(year int) SeriesBuilder {
 	return b
 }
 
-// WithGenres устанавливает жанры
 func (b *KinopoiskSeriesBuilder) WithGenres(apiGenres []struct{ Name string }) SeriesBuilder {
 	var genres []seriesModel.Genre
 	for _, g := range apiGenres {
@@ -299,7 +298,6 @@ func (b *KinopoiskSeriesBuilder) WithGenres(apiGenres []struct{ Name string }) S
 	return b
 }
 
-// WithSeasons добавляет сезоны
 func (b *KinopoiskSeriesBuilder) WithSeasons(seriesID uint) SeriesBuilder {
 	seasons, err := FetchSeasonsForSeries(seriesID)
 	if err != nil {
@@ -310,9 +308,8 @@ func (b *KinopoiskSeriesBuilder) WithSeasons(seriesID uint) SeriesBuilder {
 	return b
 }
 
-// WithRating устанавливает рейтинг
 func (b *KinopoiskSeriesBuilder) WithRating(rating float64) SeriesBuilder {
-	if rating >= 0 && rating <= 10 { // Валидация рейтинга
+	if rating >= 0 && rating <= 10 {
 		b.series.Rating = rating
 	}
 	return b

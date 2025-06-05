@@ -17,13 +17,11 @@ const NavBar = () => {
         <nav className="bg-indigo-600 text-white shadow-lg">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center py-4">
-                    {/* Логотип */}
                     <Link to="/" className="flex items-center hover:text-indigo-200 transition-colors">
                         <TvMinimalPlay className="h-7 w-7 mr-1" />
                         <span className="text-xl font-bold">LibSerial</span>
                     </Link>
 
-                    {/* Бургер */}
                     <button
                         onClick={() => setMenuOpen(!menuOpen)}
                         className="sm:hidden flex items-center focus:outline-none"
@@ -31,14 +29,13 @@ const NavBar = () => {
                         {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                     </button>
 
-                    {/* Меню (десктоп) */}
                     <div className="hidden sm:flex space-x-6 text-lg">
-                        <Link to="/" className="hover:text-indigo-200 transition-colors">Каталог</Link>
-                        <Link to="/profile" className="hover:text-indigo-200 transition-colors">Мои Сериалы</Link>
-                        <Link to="/compilation" className="hover:text-indigo-200 transition-colors">Подборки</Link>
+                        <Link to="/" className="hover:text-indigo-200 transition-colors focus:underline">Каталог</Link>
+                        {user ? <Link to="/profile" className="hover:text-indigo-200 transition-colors focus:underline">Мои Сериалы</Link> : <></>}
+                        <Link to="/compilation" className="hover:text-indigo-200 transition-colors focus:underline">Подборки</Link>
+                        <Link to="/searchfilters" className="hover:text-indigo-200 transition-colors focus:underline">Расширенный поиск</Link>
                     </div>
 
-                    {/* Аутентификация (десктоп) */}
                     <div className="hidden sm:flex items-center space-x-4">
                         {!loading && (
                             user ? (
@@ -54,7 +51,7 @@ const NavBar = () => {
                                         </Link>
                                     )}
 
-                                    <Link to="/profile" className="flex items-center hover:text-indigo-200 transition-colors">
+                                    <Link to="/profile" className="flex items-center hover:text-indigo-200 transition-colors focus:underline">
                                         <User className="h-5 w-5 mr-1" />
                                         <span>{user.Name || "Null"}</span>
                                     </Link>
@@ -79,12 +76,13 @@ const NavBar = () => {
                     </div>
                 </div>
 
-                {/* Мобильное меню */}
                 {menuOpen && (
                     <div className="sm:hidden flex flex-col gap-4 pb-4 text-base border-t border-indigo-500">
                         <Link to="/" className="hover:text-indigo-200 transition-colors">Каталог</Link>
-                        <Link to="/profile" className="hover:text-indigo-200 transition-colors">Сериалы</Link>
+                        {/*<Link to="/profile" className="hover:text-indigo-200 transition-colors">Сериалы</Link>*/}
+                        {user ? <Link to="/profile" className="hover:text-indigo-200 transition-colors focus:underline">Мои Сериалы</Link> : <></>}
                         <Link to="/compilation" className="hover:text-indigo-200 transition-colors">Подборки</Link>
+                        <Link to="/searchfilters" className="hover:text-indigo-200 transition-colors ">Расширенный поиск</Link>
 
                         {!loading && (
                             user ? (

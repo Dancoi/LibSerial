@@ -59,7 +59,12 @@ const Carousel = ({ seriesData, Title }) => {
 
     return (
         <div className="relative w-full bg-gray-50 rounded-xl shadow-lg">
-            <h2 className="text-indigo-600 text-3xl font-bold text-center mb-6">{CarouselTitle}</h2>
+            {/*<h2 className="text-indigo-600 text-3xl font-bold text-center mb-6 mt-6 bg-zinc-100">{CarouselTitle}</h2>*/}
+            <div className="flex justify-center items-center pt-4">
+                <div className="bg-zinc-200/20 rounded-xl pr-3 pl-3">
+                    <h2 className="text-3xl font-bold text-indigo-600">{CarouselTitle}</h2>
+                </div>
+            </div>
             <div
                 className="flex justify-center items-center w-full min-h-[calc(28rem*1.2)]">
                 <button

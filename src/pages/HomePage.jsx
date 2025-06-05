@@ -34,10 +34,10 @@ const HomePage = () => {
     );
 
     const carouselSeries = series.slice(0, 9).map(s => ({
-        id: s.ID, // или s.id, в зависимости от вашей API
+        id: s.ID,
         title: s.Title,
-        poster: s.PosterURL, // Убедитесь, что это поле существует и содержит URL постера
-        rating: s.Rating, // Убедитесь, что это поле существует
+        poster: s.PosterURL,
+        rating: s.Rating,
     }));
 
     return (
@@ -78,10 +78,12 @@ const HomePage = () => {
                 </div>
             ) : filteredSeries.length > 0 ? (
                 <>
-                    <div className="my-8">
-                        {/*<h2 className="text-2xl font-bold text-white mb-4 text-center">Избранные сериалы</h2>*/}
-                        <Carousel seriesData={carouselSeries} Title={"Новинки"}/>
-                    </div>
+                    {searchTerm === '' &&
+                        <div className="my-8">
+                            {/*<h2 className="text-2xl font-bold text-white mb-4 text-center">Избранные сериалы</h2>*/}
+                            <Carousel seriesData={carouselSeries} Title={"Новинки"}/>
+                        </div>
+                    }
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         {filteredSeries.map(show => (

@@ -23,8 +23,25 @@ func NewSeriesHandler(repo repository.SeriesRepository) *SeriesHandler {
 	return &SeriesHandler{repo: repo}
 }
 
+type SeriesHandlerBuilder struct {
+	repo    repository.SeriesRepository
+	builder kinopoiskParse.SeriesBuilder
+}
+
+func NewSerialHandleBuilder(repo repository.SeriesRepository, builder kinopoiskParse.SeriesBuilder) *SeriesHandlerBuilder {
+	return &SeriesHandlerBuilder{repo: repo, builder: builder}
+}
+
 func (h *SeriesHandler) GetListSeries(w http.ResponseWriter, r *http.Request) {
-	series, err := h.repo.GetAll()
+	filters := map[string]string{
+		"title":    r.URL.Query().Get("title"),
+		"genre":    r.URL.Query().Get("genre"),
+		"yearFrom": r.URL.Query().Get("yearFrom"),
+		"yearTo":   r.URL.Query().Get("yearTo"),
+		"status":   r.URL.Query().Get("status"),
+	}
+
+	series, err := h.repo.GetAll(filters)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -110,33 +127,6 @@ func (h *SeriesHandler) DeleteSeries(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-//	func (h *SeriesHandler) SearchSeriesHandler(w http.ResponseWriter, r *http.Request) {
-//		query := r.URL.Query().Get("query")
-//		if query == "" {
-//			http.Error(w, "Параметр 'query' обязателен", http.StatusBadRequest)
-//			return
-//		}
-//
-//		page, limit := getPaginationParams(r)
-//
-//		seriesList, err := kinopoiskParse.FetchSeriesForFrontend(query, page, limit)
-//		if err != nil {
-//			http.Error(w, "Ошибка получения сериалов: "+err.Error(), http.StatusInternalServerError)
-//			return
-//		}
-//
-//		respondWithJSON(w, http.StatusOK, seriesList)
-//	}
-
-type SeriesHandlerBuilder struct {
-	repo    repository.SeriesRepository
-	builder kinopoiskParse.SeriesBuilder
-}
-
-func NewSerialHandleBuilder(repo repository.SeriesRepository, builder kinopoiskParse.SeriesBuilder) *SeriesHandlerBuilder {
-	return &SeriesHandlerBuilder{repo: repo, builder: builder}
-}
-
 func (h *SeriesHandlerBuilder) SearchSeriesHandler(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query().Get("query")
 	if query == "" {
@@ -146,7 +136,6 @@ func (h *SeriesHandlerBuilder) SearchSeriesHandler(w http.ResponseWriter, r *htt
 
 	page, limit := getPaginationParams(r)
 
-	// Запрос к API Кинопоиск (логика из твоего кода)
 	apiURL := "https://api.kinopoisk.dev/v1.4/movie/search"
 	params := url.Values{}
 	params.Add("query", query)
@@ -159,7 +148,7 @@ func (h *SeriesHandlerBuilder) SearchSeriesHandler(w http.ResponseWriter, r *htt
 		return
 	}
 
-	req.Header.Add("X-API-KEY", os.Getenv("KINOPOISK_API_KEY"))
+	req.Header.Add("X-API-KEY", os.Getenv("X_API_KEY"))
 	req.Header.Add("Accept", "application/json")
 
 	client := &http.Client{}
@@ -176,6 +165,8 @@ func (h *SeriesHandlerBuilder) SearchSeriesHandler(w http.ResponseWriter, r *htt
 		return
 	}
 
+	fmt.Println(string(body))
+
 	var result struct {
 		Docs []kinopoiskParse.APISeries `json:"docs"`
 	}
@@ -184,7 +175,6 @@ func (h *SeriesHandlerBuilder) SearchSeriesHandler(w http.ResponseWriter, r *htt
 		return
 	}
 
-	// Сборка сериалов с помощью Builder
 	var seriesList []seriesModel.Series
 	for _, apiSeries := range result.Docs {
 		if !apiSeries.IsSeries {
@@ -192,6 +182,7 @@ func (h *SeriesHandlerBuilder) SearchSeriesHandler(w http.ResponseWriter, r *htt
 		}
 
 		series, err := h.builder.
+			WithID(apiSeries.ID).
 			WithTitle(apiSeries.Name, apiSeries.AlternativeName).
 			WithYear(apiSeries.Year).
 			WithGenres([]struct{ Name string }(apiSeries.Genres)).
@@ -214,7 +205,6 @@ func (h *SeriesHandlerBuilder) SearchSeriesHandler(w http.ResponseWriter, r *htt
 	respondWithJSON(w, http.StatusOK, seriesList)
 }
 
-// Вспомогательные функции
 func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
@@ -226,7 +216,7 @@ func getPaginationParams(r *http.Request) (int, int) {
 	limitStr := r.URL.Query().Get("limit")
 
 	page := 1
-	limit := 5
+	limit := 30
 
 	if pageStr != "" {
 		if p, err := strconv.Atoi(pageStr); err == nil {

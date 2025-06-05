@@ -1,7 +1,7 @@
 import React from "react";
 import { ChevronDown, ChevronUp, Calendar, PlayCircle } from "lucide-react";
 
-const SeasonsList = ({ seasons = [], openSeasons, toggleSeason }) => {
+const SeasonsList = ({ seasons = [], openSeasons, toggleSeason, series }) => {
     return (
         <div className="bg-white rounded-xl shadow-sm p-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Сезоны</h2>
@@ -28,7 +28,7 @@ const SeasonsList = ({ seasons = [], openSeasons, toggleSeason }) => {
                                             className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                                             {episode.PosterURL && (
                                                 <img
-                                                    src={episode.PosterURL}
+                                                    src={episode.PosterURL || series.BackdropURL}
                                                     alt={episode.Title}
                                                     className="w-48 h-36 object-cover rounded-md sm:shrink-0 self-center sm:self-auto"
                                                 />

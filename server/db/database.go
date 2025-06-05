@@ -33,7 +33,6 @@ func ConnectDB() *gorm.DB {
 			log.Fatal("Ошибка подключения к БД:", err)
 		}
 
-		// Выполняем миграции
 		err = db.AutoMigrate(
 			&userModel.User{},
 			&userModel.Role{},
@@ -45,6 +44,16 @@ func ConnectDB() *gorm.DB {
 		)
 		if err != nil {
 			log.Fatal("Ошибка миграции:", err)
+		}
+
+		var count int64
+		db.Model(&userModel.Role{}).Where("id = ?", 1).Count(&count)
+		if count == 0 {
+			db.Create(&userModel.Role{ID: 1, Role: "user"})
+		}
+		db.Model(&userModel.Role{}).Where("id = ?", 2).Count(&count)
+		if count == 0 {
+			db.Create(&userModel.Role{ID: 1, Role: "admin"})
 		}
 
 		DB = db

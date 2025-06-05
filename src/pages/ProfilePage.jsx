@@ -155,11 +155,13 @@ const Profile = () => {
                             {watchlist.map(series => (
                                 <div key={series.ID}
                                      className="flex items-center border-b border-gray-200 pb-4 last:border-0">
-                                    <img
-                                        src={series.PosterURL}
-                                        alt={series.Title}
-                                        className="w-16 h-24 object-cover rounded-md mr-4"
-                                    />
+                                    <Link to={`/serial/${series.ID}`}>
+                                        <img
+                                            src={series.PosterURL}
+                                            alt={series.Title}
+                                            className="w-16 h-24 object-cover rounded-md mr-4"
+                                        />
+                                    </Link>
                                     <div className="flex-1">
                                         <h4 className="font-medium text-gray-800">{series.Title}</h4>
                                         <div className="flex items-center text-sm text-gray-600 mb-1">
@@ -184,14 +186,14 @@ const Profile = () => {
                                     </div>
                                     <Link to={`/serial/${series.ID}`}>
                                         <button
-                                            className="text-blue-500 hover:text-blue-700"
+                                            className="text-blue-500 hover:text-blue-700 bg-gray-50 p-2 rounded-xl ml-6"
                                         >
                                             Перейти
                                         </button>
                                     </Link>
                                     <button
                                         onClick={() => removeFromWatchlist(series.ID)}
-                                        className="text-red-500 hover:text-red-700 ml-2"
+                                        className="text-red-500 hover:text-red-700 ml-2 bg-gray-50 p-2 rounded-xl"
                                     >
                                         Удалить из избранного
                                     </button>

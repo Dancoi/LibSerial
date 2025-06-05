@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
             await fetchUser(response.data.token);
         } catch (err) {
             setError(err.response?.data);
-            throw new Error(err.response?.data); // Добавляем throw
+            throw new Error(err.response?.data);
         } finally {
             setLoading(false);
         }

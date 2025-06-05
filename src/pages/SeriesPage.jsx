@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {useParams, Link, useNavigate} from 'react-router-dom';
 import axios from 'axios';
-
 import SeriesInfo from '../components/seriesPage/SeriesInfo.jsx';
 import SeasonsList from '../components/seriesPage/SeasonsList.jsx';
 import {useAuth} from "../contexts/AuthContext.jsx";
@@ -35,7 +34,7 @@ const SeriesPage = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            setIsWatchlist(response.data.inFavorites); // <- true/false
+            setIsWatchlist(response.data.inFavorites);
         } catch (err) {
             console.error('Ошибка получения статуса избранного', err);
         }
@@ -76,7 +75,7 @@ const SeriesPage = () => {
                 const response = await axios.get(`http://localhost:8080/api/series/${id}`);
                 setSeries(response.data);
             } catch (err) {
-                setError('Ошибка загрузки данных');
+                setError('Ошибка загрузки данных: ' + err);
             } finally {
                 setLoading(false);
             }
@@ -126,6 +125,7 @@ const SeriesPage = () => {
                     seasons={series.Seasons || []}
                     openSeasons={openSeasons}
                     toggleSeason={toggleSeason}
+                    series={series}
                 />
             </div>
         </div>

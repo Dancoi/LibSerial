@@ -12,6 +12,8 @@ import FindAddPage from "../pages/FindAddPage.jsx";
 import CompilationPage from "../pages/CompilationPage.jsx";
 import AdminSeriesPage from "../pages/AdminSeriesPage.jsx";
 import EditSeriesPage from "../pages/EditSeriesPage.jsx";
+import SearchPage from "../pages/SearchPage.jsx";
+import AdminUsersPage from "../pages/AdminUsersPage.jsx";
 
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -84,6 +86,20 @@ export const routes = [
         element:
             <AdminRoute>
                 <EditSeriesPage/>
+            </AdminRoute>
+    },
+    {
+        path: "/searchfilters",
+        element:
+            <ProtectedRoute>
+                <SearchPage/>
+            </ProtectedRoute>
+    },
+    {
+        path: "/admin/users",
+        element:
+            <AdminRoute>
+                <AdminUsersPage/>
             </AdminRoute>
     }
 ];

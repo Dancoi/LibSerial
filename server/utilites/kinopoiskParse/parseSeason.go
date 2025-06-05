@@ -134,6 +134,11 @@ func FetchSeasonsForSeries(seriesID uint) ([]seriesModel.Season, error) {
 			return episodes[i].Number < episodes[j].Number
 		})
 
+		//fmt.Printf("Season %d:\n", s.Number)
+		//for _, ep := range s.Episodes {
+		//	fmt.Printf("  Episode: %d - %s\n", ep.Number, ep.Name)
+		//}
+
 		seasons = append(seasons, seriesModel.Season{
 			Number:   s.Number,
 			Episodes: episodes,

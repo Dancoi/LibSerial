@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Edit, Trash2, Eye, Search, Plus } from 'lucide-react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -9,7 +9,7 @@ const AdminSeriesPage = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     useEffect(() => {
         const fetchSeries = async () => {
@@ -72,9 +72,21 @@ const AdminSeriesPage = () => {
     return (
         <div className="mx-auto px-4 py-8 rounded-xl shadow-md">
             <div className="mb-8 mx-auto">
-                <h1 className="text-3xl font-bold text-indigo-600 border-l-4 border-indigo-500 pl-4 mb-4">
-                    Управление сериалами
-                </h1>
+                {/*<h1 className="text-3xl font-bold text-indigo-600 border-l-4 border-indigo-500 pl-4 mb-4">*/}
+                {/*    Управление сериалами*/}
+                {/*</h1>*/}
+                <div className="flex items-center justify-between mb-4">
+                    <h1 className="text-3xl font-bold text-indigo-600 border-l-4 border-indigo-500 pl-4 mb-0">
+                        Управление сериалами
+                    </h1>
+                    <Link
+                        to="/admin/users"
+                        className="text-2xl text-gray-500 hover:text-gray-700 underline-offset-2 hover:underline transition pr-4 border-r-3"
+                    >
+                        Управление пользователями
+                    </Link>
+                </div>
+
 
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                     <div className="relative flex-1 w-full">
@@ -91,7 +103,8 @@ const AdminSeriesPage = () => {
                     </div>
 
                     <Link to="/search">
-                        <button className="flex items-center whitespace-nowrap px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors">
+                        <button
+                            className="flex items-center whitespace-nowrap px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors">
                             <Plus className="h-5 w-5 mr-2"/>
                             Добавить сериал
                         </button>
@@ -108,7 +121,7 @@ const AdminSeriesPage = () => {
                     <table className="min-w-full bg-white rounded-lg overflow-hidden">
                         <thead className="bg-gray-100">
                         <tr>
-                            <th className="py-3 px-4 text-left">Постер</th>
+                        <th className="py-3 px-4 text-left">Постер</th>
                             <th className="py-3 px-4 text-left">Название</th>
                             <th className="py-3 px-4 text-left">Год</th>
                             <th className="py-3 px-4 text-left">Рейтинг</th>
